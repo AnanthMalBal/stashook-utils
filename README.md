@@ -4,13 +4,16 @@
 # Helper for Query Retrievals from helper.js and 
 # Connection for Database Connectivity throught .env file from db-connect.js
 
-To compile and build and publish use following commands in any Terminal;
+# To compile and build and publish use following commands in any Terminal;
 
 $ npm link
 
 $ npm pack
 
-$ npm publish  (which requires login for npm portal; Login with soundaravalli2021@gmail.com account using passcode (provided by Google Authenticator)
-                To perform login - Install Google Authenticator in Mobile.
-                Connect with username: soundaravalli2021@gmail.com and password : xxxxxxxx (Contact admin)
-                Note: Update version for each npm publish in package.json
+$ npm publish  
+
+# Which requires login for npm portal; 
+# Login with soundaravalli2021@gmail.com account using passcode (provided by Google Authenticator.
+# To perform login - Install Google Authenticator in Mobile.
+# Connect with username: soundaravalli2021@gmail.com and password : xxxxxxxx (Contact admin)
+# Note: Update version for each npm publish in package.json
