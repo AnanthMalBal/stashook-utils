@@ -1,12 +1,12 @@
 # stashook-util - It is the utility project which holds 
 
-# Database Generic Model from model.js 
+# "Model" for Database Generic Model from model.js 
 
-# Util for utility methods from util.js, 
+# "Util" for utility methods from util.js, 
 
-# Helper for Query Retrievals from helper.js and 
+# "Helper" for Query Retrievals from helper.js and 
 
-# Connection for Database Connectivity throught .env file from db-connect.js
+# "Connection" for Database Connectivity throught .env file from db-connect.js
 
 # To compile and build and publish use following commands in any Terminal;
 
