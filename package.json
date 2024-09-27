@@ -1,13 +1,15 @@
 {
   "name": "stashook-utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Stashook Technologies Private Limited",
   "license": "ISC",
-  "description": "",
+  "description": "This is a Stashook's Utility Project",
   "dependencies": {
+    "moment": "^2.30.1",
+    "dotenv": "^16.4.5"
   }
 }
