@@ -41,7 +41,7 @@ module.exports = class Model {
     }
 
     //insert data via object such as {id: 1, title: 'Hello MySQL'} 
-    create(idCol, data) {
+    create(data, idCol) {
 
         let cThis = this;
         return new Promise(function (myResolve, myReject) {
@@ -51,9 +51,14 @@ module.exports = class Model {
 
                 if (error) throw error;
 
-                let data = cThis.findById(idCol, result.insertId, 1);
-                data.then(function (value) { myResolve(value) })
-                    .catch(function (error) { myReject(error) });
+                if(idCol)
+                {
+                    let data = cThis.findById(idCol, result.insertId, 1);
+                    data.then(function (value) { myResolve(value) })
+                        .catch(function (error) { myReject(error) });
+                }
+                else
+                    myResolve(result);   
 
             });
         });

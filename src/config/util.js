@@ -10,11 +10,15 @@ module.exports = {
         return key + Date.now();
     },
 
-    getDate() {
-        return moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+    getDate(_DateFormat = 'YYYY-MM-DD HH:mm:ss') {
+        return moment(Date.now()).format(_DateFormat);
     },
 
-    enclose(data) {
+    withPercent(data) {
+        return "%" + data + "%";
+    },
+
+    withQuote(data) {
         return "'" + data + "'";
     },
 
@@ -24,6 +28,14 @@ module.exports = {
     },
 
     sendError401(res, message)
+    {
+        res.status(401).send({
+            message: message
+        });
+        res.end();
+    },
+
+    sendError403(res, message)
     {
         res.status(401).send({
             message: message
