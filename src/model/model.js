@@ -40,30 +40,6 @@ module.exports = class Model {
 
     }
 
-    //insert data via object such as {id: 1, title: 'Hello MySQL'} 
-    create(data, idCol) {
-
-        let cThis = this;
-        return new Promise(function (myResolve, myReject) {
-            connection.query('INSERT INTO ?? SET ?', [cThis.table, data], function (error, result) {
-
-                console.log( cThis.table + " ::: create ::: " + JSON.stringify(result));
-
-                if (error) throw error;
-
-                if(idCol)
-                {
-                    let data = cThis.findById(idCol, result.insertId, 1);
-                    data.then(function (value) { myResolve(value) })
-                        .catch(function (error) { myReject(error) });
-                }
-                else
-                    myResolve(result);   
-
-            });
-        });
-
-    }
 
 
     //update row and return new data as an object
@@ -74,7 +50,7 @@ module.exports = class Model {
             connection.query('UPDATE  ?? SET ? WHERE ? = ?', [cThis.table, data, idCol, idVal], function (error, result) {
                 if (error) throw error;
 
-                console.log( cThis.table + " ::: update ::: " + JSON.stringify(result));
+                console.log(cThis.table + " ::: update ::: " + JSON.stringify(result));
 
                 let data = cThis.findById(idCol, idVal);
                 data.then(function (value) { myResolve(value) })
@@ -92,8 +68,8 @@ module.exports = class Model {
         return new Promise(function (myResolve, myReject) {
             connection.query('UPDATE  ?? SET status = ? WHERE ? = ?', [cThis.table, data.status, idCol, idVal], function (error, result) {
                 if (error) throw error;
-                
-                console.log( cThis.table + " ::: delete ::: " + JSON.stringify(result));
+
+                console.log(cThis.table + " ::: delete ::: " + JSON.stringify(result));
 
                 let data = cThis.findById(idCol, idVal);
                 data.then(function (value) { myResolve(value) })
@@ -115,7 +91,7 @@ module.exports = class Model {
             connection.query('DELETE FROM  ??  WHERE ? = ?', [cThis.table, idCol, idVal], function (error, result) {
                 if (error) throw error;
 
-                console.log( cThis.table + " ::: permanentDelete ::: " + JSON.stringify(result));
+                console.log(cThis.table + " ::: permanentDelete ::: " + JSON.stringify(result));
 
                 myResolve(result)
 
@@ -124,6 +100,29 @@ module.exports = class Model {
 
     }
 
+    //insert data via object such as {id: 1, title: 'Hello MySQL'} 
+    create(data, idCol) {
 
+        let cThis = this;
+        return new Promise(function (myResolve, myReject) {
 
+            connection.query('INSERT INTO ?? SET ?', [cThis.table, data], function (error, result) {
+
+                console.log("::Queries::data:: " + JSON.stringify(data));
+
+                if (error ) myReject(error);
+
+                //console.log("::Queries::Create:: " + JSON.stringify(error));
+
+                if (idCol && result.affectedRows > 0) {
+                        result.insertId = data[idCol];
+                        myResolve(result);
+                }
+                else
+                    myReject(new Error("Unable to Insert Data"));
+            });
+            return;
+        });
+
+    }
 }
