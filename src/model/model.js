@@ -108,24 +108,20 @@ module.exports = class Model {
 
             connection.query('INSERT INTO ?? SET ?', [cThis.table, data], function (error, result) {
 
-                console.log( cThis.table + " ::: create ::: " + JSON.stringify(result));
+                // console.log("::Queries::data:: " + JSON.stringify(data));
 
-                if (error) throw error;
+                if (error ) myReject(error);
 
-                if(idCol)
-                {
-                    const dataValue = data[idCol];
-                    if(result.insertId === 0)
-                        result.insertId = dataValue;
-    
-                    let data = cThis.findById(idCol, result.insertId, 1);
-                    data.then(function (value) { myResolve(value) })
-                        .catch(function (error) { myReject(error) });
+                //console.log("::Queries::Create:: " + JSON.stringify(error));
+
+                if (idCol && result.affectedRows > 0) {
+                        result.insertId = data[idCol];
+                        myResolve(result);
                 }
                 else
-                    myResolve(result);      
-
+                    myReject(new Error("Unable to Insert Data"));
             });
+            return;
         });
 
     }
