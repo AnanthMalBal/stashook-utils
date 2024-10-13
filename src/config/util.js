@@ -24,27 +24,23 @@ module.exports = {
 
     sendError500(req, res, excep) {
         const statusCode = excep.statusCoderes || 500;
-        res.status(statusCode, "Error").send({type: 'error', message: excep.message});
+        res.status(statusCode, "Error").send({ type: 'error', message: excep.message });
         res.end();
     },
 
-    sendError401(res, message)
-    {
+    sendError401(res, message) {
         res.status(401).send({
-            type: 'error', 
+            type: 'error',
             message: message
         });
         res.end();
     },
 
-    sendError403(res, message)
-    {
+    sendError403(res, message) {
         res.status(401).send({
-            type: 'error', 
+            type: 'error',
             message: message
         });
         res.end();
-    },
-    
-   
+    }
 }
