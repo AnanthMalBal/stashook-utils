@@ -114,9 +114,10 @@ module.exports = class Model {
 
                 //console.log("::Queries::Create:: " + JSON.stringify(error));
 
-                if (idCol && result.affectedRows > 0) {
+                if (result.affectedRows > 0 ) {
+                    if(idCol)
                         result.insertId = data[idCol];
-                        myResolve(result);
+                    myResolve(result);
                 }
                 else
                     myReject(new Error("Unable to Insert Data"));
