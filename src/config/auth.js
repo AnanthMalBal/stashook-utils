@@ -24,13 +24,7 @@ module.exports = {
             if (err) { Util.sendError401(res, INVALID_TOKEN); return ;}
             //console.log("::::::::::Embedded Token Details ::::::: " + JSON.stringify(obj));
 
-            req.userId = obj.userId;
-            req.userName = obj.userName;
-            req.employeeId = obj.employeeId;
-            req.producerId = obj.producerId;
-            req.userType = obj.userType;
-            req.isAdmin = obj.isAdmin;
-            req.roles = obj.roles;
+            req.sessionUser = obj ;
             
             next();
         })
