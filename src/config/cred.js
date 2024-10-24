@@ -10,6 +10,7 @@ const cred = {
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE,
+    multipleStatements: true,
     insecureAuth: true,
     connectTimeout: 60000,
     pool: {
