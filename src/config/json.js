@@ -5,9 +5,8 @@ module.exports = {
         results.forEach(row => {
             let value = row[field];
             let result = '';
-            for(i= 0; i < value.length ; i++)
-            {
-                let char = value.charAt(i) ;
+            for (i = 0; i < value.length; i++) {
+                let char = value.charAt(i);
                 if (isNumeric(char))
                     result = result + alpha[char];
                 else
@@ -16,11 +15,25 @@ module.exports = {
             row[field] = result;
             // console.log(">>>>mask>>>>>row[field] >>>>>>> " +  row[field]);
         });
-        
+
+    },
+
+    maskField(value) {
+        const alpha = ['a', 'b', 'c', 'p', 'q', 'r', 's', 'x', 'y', 'z']
+        let result = '';
+        for (i = 0; i < value.length; i++) {
+            let char = value.charAt(i);
+            if (isNumeric(char))
+                result = result + alpha[char];
+            else
+                result = result + char;
+        }
+        // console.log(">>>>mask>>>>>row[field] >>>>>>> " +  row[field]);
+        return result;
     },
 
     unmask(results, field) {
-        
+
         results.forEach(row => {
             row[field] = this.unmaskField(row[field]);
             //console.log(">>>>unmask>>>>>row[field] >>>>>>> " +  row[field]);
@@ -34,7 +47,7 @@ module.exports = {
             let char = value.charAt(i);
             if (isUpperCase(char))
                 result = result + char;
-    
+
             else
                 result = result + alpha.indexOf(char);
         }
@@ -95,4 +108,4 @@ function isNumeric(str) {
 function isUpperCase(char) {
     const charCode = char.charCodeAt(0);
     return charCode >= 65 && charCode <= 90;
-  }
+}
