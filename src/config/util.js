@@ -40,7 +40,7 @@ module.exports = {
     },
 
     sendError500(req, res, excep) {
-        const statusCode = excep.statusCoderes || 500;
+        const statusCode = excep.statusCode || 500;
         res.status(statusCode, "Error").send({ type: 'error', message: excep.message });
         res.end();
     },
@@ -54,7 +54,7 @@ module.exports = {
     },
 
     sendError403(res, message) {
-        res.status(401).send({
+        res.status(403).send({
             type: 'error',
             message: message
         });

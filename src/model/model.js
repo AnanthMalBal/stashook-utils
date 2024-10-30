@@ -126,4 +126,36 @@ module.exports = class Model {
         });
 
     }
+
+    
+    //insert data via object such as {id: 1, title: 'Hello MySQL'} 
+    createBulk(data) {
+
+        let cThis = this;
+        return new Promise(function (myResolve, myReject) {
+
+            let cols = '';
+            data.cols.forEach(elt => {
+                cols = result + "'" + elt + "',";
+            });
+
+            cols = cols.substring(0, cols.lastIndexOf(','));
+
+            console.log("::Queries::cols:: " + cols);
+
+            connection.query('INSERT INTO ?? (?) VALUES ?', [cThis.table, cols, data.values], function (error, result) {
+
+                console.log("::Queries::Create:: " + JSON.stringify(error));
+
+                if (error || result !== undefined && result.affectedRows === 0) myReject(error);
+
+                if (result && result.affectedRows > 0)
+                    myResolve(result);
+                else
+                    myReject(new Error("Unable to Insert Data"));
+            });
+            return;
+        });
+
+    }
 }

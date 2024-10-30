@@ -1,9 +1,16 @@
+const moment = require('moment');
+
+moment.createFromInputFallback = function (config) {
+    // unreliable string magic, or
+    config._d = new Date(config._i);
+};
+
 module.exports = {
 
     mask(results, field) {
         const alpha = ['a', 'b', 'c', 'p', 'q', 'r', 's', 'x', 'y', 'z']
         results.forEach(row => {
-            let value = row[field];
+            let value = row[field] + '';
             let result = '';
             for (i = 0; i < value.length; i++) {
                 let char = value.charAt(i);
@@ -79,6 +86,30 @@ module.exports = {
     empty(results) {
         this.null(results, true);
     },
+
+    dates(results, field, _DateFormat = 'YYYY-MM-DD HH:mm:ss') {
+
+        results.forEach(row => {
+            let value = row[field];
+            if (value !== undefined && value !== null)
+                row[field] = moment(value + '').format(_DateFormat) + '';
+            // console.log(">>>>dates>>>>>row[field] >>>>>>> " +  row[field]);
+        });
+
+    },
+
+    bitToInt(results, field)
+    {
+        results.forEach(row => {
+            let value = row[field];
+            if (value === undefined || value === null)
+                row[field] = 0; 
+            else
+                row[field] = !!row[field] ? 1 : 0 ;
+            //console.log(">>>>bitAsInt>>>>>row[field] >>>>>>> " +  row[field]);
+        });
+    }
+
 }
 
 
