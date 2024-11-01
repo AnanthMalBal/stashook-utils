@@ -6,8 +6,38 @@ module.exports = class Model {
         this.table = table;
     }
 
-    getOffset(currentPage = 1, listPerPage = 10) {
-        return (currentPage - 1) * [listPerPage];
+    SearchWithLimit(req, Query)
+    {
+        const offset = this.getOffset(req);
+        return Query + ' ORDER BY ' + req.body.sort + ' LIMIT '+ offset + ',' + req.body.perPage + ';';
+        //console.log("::SearchWithLimit:: " + Query);
+    }
+
+    searchResults(req, res, results) {
+        let cThis = this;
+        connection.query(`SELECT COUNT(*) AS totalRows FROM ??`, [this.table], function (error, cntResult) {
+
+            let finalResult = {}
+
+            finalResult.data = results;
+            finalResult.sort = req.body.sort;
+            finalResult.page = req.body.page;
+            finalResult.perPage = req.body.perPage;
+            
+            if (error || cntResult === undefined) finalResult.totalRows = 0 ;
+            else finalResult.totalRows = cntResult[0].totalRows;
+
+            res.json(finalResult);
+
+        });
+    }
+
+    getOffset(req) {
+
+        const page = req.body.page ? req.body.page : 1;
+        const perPage = req.body.perPage ? req.body.perPage : 10;
+
+        return (page - 1) * [perPage];
     }
 
     emptyOrRows(rows) {
