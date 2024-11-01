@@ -1,5 +1,3 @@
-const config = require('../config/cred');
-const helper = require('../config/helper');
 const connection = require('../config/db-connect');
 
 module.exports = class Model {
@@ -8,14 +6,27 @@ module.exports = class Model {
         this.table = table;
     }
 
+    getOffset(currentPage = 1, listPerPage = 10) {
+        return (currentPage - 1) * [listPerPage];
+    }
+
+    emptyOrRows(rows) {
+        if (!rows) {
+            return [];
+        }
+        return rows;
+    }
+
     //find all table rows and return the result object:
-    findAll(page = 1) {
+    findAll(page = 1, listPerPage) {
 
         let cThis = this;
-        return new Promise(function (myResolve, myReject) {
-            const offset = helper.getOffset(page, config.listPerPage);
 
-            connection.query('SELECT * FROM ?? LIMIT ?, ?', [cThis.table, offset, config.listPerPage], function (error, result) {
+        return new Promise(function (myResolve, myReject) {
+
+            const offset = cThis.getOffset(page, listPerPage);
+
+            connection.query('SELECT * FROM ?? LIMIT ?, ?', [cThis.table, offset, listPerPage], function (error, result) {
                 if (error) throw error;
 
 
@@ -25,14 +36,14 @@ module.exports = class Model {
     }
 
     //get row by id and return the result object:
-    findById(colName, colValue, page = 1) {
+    findById(colName, colValue, page = 1, listPerPage) {
 
         let cThis = this;
         return new Promise(function (myResolve, myReject) {
 
-            const offset = helper.getOffset(page, config.listPerPage);
+            const offset = cThis.getOffset(page, listPerPage);
 
-            connection.query('SELECT * FROM ?? WHERE ? = ? LIMIT ?, ?', [cThis.table, colName, colValue, offset, config.listPerPage], function (error, result) {
+            connection.query('SELECT * FROM ?? WHERE ? = ? LIMIT ?, ?', [cThis.table, colName, colValue, offset, listPerPage], function (error, result) {
                 if (error) throw error;
                 myResolve(result[0]);
             })
@@ -50,7 +61,7 @@ module.exports = class Model {
             connection.query('UPDATE  ?? SET ? WHERE ? = ?', [cThis.table, data, idCol, idVal], function (error, result) {
                 if (error) throw error;
 
-                console.log( cThis.table + " ::: update ::: " + JSON.stringify(result));
+                console.log(cThis.table + " ::: update ::: " + JSON.stringify(result));
 
                 let data = cThis.findById(idCol, idVal);
                 data.then(function (value) { myResolve(value) })
@@ -68,8 +79,8 @@ module.exports = class Model {
         return new Promise(function (myResolve, myReject) {
             connection.query('UPDATE  ?? SET status = ? WHERE ? = ?', [cThis.table, data.status, idCol, idVal], function (error, result) {
                 if (error) throw error;
-                
-                console.log( cThis.table + " ::: delete ::: " + JSON.stringify(result));
+
+                console.log(cThis.table + " ::: delete ::: " + JSON.stringify(result));
 
                 let data = cThis.findById(idCol, idVal);
                 data.then(function (value) { myResolve(value) })
@@ -91,7 +102,7 @@ module.exports = class Model {
             connection.query('DELETE FROM  ??  WHERE ? = ?', [cThis.table, idCol, idVal], function (error, result) {
                 if (error) throw error;
 
-                console.log( cThis.table + " ::: permanentDelete ::: " + JSON.stringify(result));
+                console.log(cThis.table + " ::: permanentDelete ::: " + JSON.stringify(result));
 
                 myResolve(result)
 
@@ -108,14 +119,14 @@ module.exports = class Model {
 
             connection.query('INSERT INTO ?? SET ?', [cThis.table, data], function (error, result) {
 
-                // console.log("::Queries::data:: " + JSON.stringify(data));
+                console.log("::Queries::data:: " + JSON.stringify(data));
 
-                if (error ) myReject(error);
+                if (error) myReject(error);
 
-                //console.log("::Queries::Create:: " + JSON.stringify(error));
+                console.log("::Queries::Create:: " + JSON.stringify(error));
 
-                if (result.affectedRows > 0 ) {
-                    if(idCol)
+                if (result !== undefined && result.affectedRows > 0) {
+                    if (idCol)
                         result.insertId = data[idCol];
                     myResolve(result);
                 }
@@ -127,25 +138,25 @@ module.exports = class Model {
 
     }
 
-    
+
     //insert data via object such as {id: 1, title: 'Hello MySQL'} 
     createBulk(data) {
-
+        console.log("::Queries::data:: " + JSON.stringify(data));
         let cThis = this;
         return new Promise(function (myResolve, myReject) {
 
             let cols = '';
             data.cols.forEach(elt => {
-                cols = result + "'" + elt + "',";
+                cols = cols + "`" + elt + "`,";
             });
 
             cols = cols.substring(0, cols.lastIndexOf(','));
 
             console.log("::Queries::cols:: " + cols);
 
-            connection.query('INSERT INTO ?? (?) VALUES ?', [cThis.table, cols, data.values], function (error, result) {
+            connection.query('INSERT INTO ?? (' + cols + ') VALUES ?', [cThis.table, data.values], function (error, result) {
 
-                console.log("::Queries::Create:: " + JSON.stringify(error));
+                console.log("::Queries::Create:: " + JSON.stringify(result));
 
                 if (error || result !== undefined && result.affectedRows === 0) myReject(error);
 

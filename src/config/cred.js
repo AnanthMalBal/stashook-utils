@@ -19,8 +19,7 @@ const cred = {
       acquire: 30000,
       idle: 10000
     }
-  },
-  listPerPage: 10,
+  }
 };
 
 
