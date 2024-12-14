@@ -52,12 +52,14 @@ module.exports = {
         let result = '';
         for (i = 0; i < value.length; i++) {
             let char = value.charAt(i);
+
             if (isUpperCase(char))
                 result = result + char;
-
             else
                 result = result + alpha.indexOf(char);
+
         }
+        console.log(":::::::unmaskField(value)::::::: " + result);
         return result;
     },
 
@@ -73,7 +75,7 @@ module.exports = {
         });
     },
 
-    null(results, emptyToo = false) {
+    nulls(results, emptyToo = false) {
         const keys = jsonKeys(results);
         results.forEach(row => {
             keys.forEach(key => {
@@ -84,7 +86,7 @@ module.exports = {
     },
 
     empty(results) {
-        this.null(results, true);
+        this.nulls(results, true);
     },
 
     dates(results, field, _DateFormat = 'YYYY-MM-DD HH:mm:ss') {
@@ -95,17 +97,25 @@ module.exports = {
                 row[field] = moment(value + '').format(_DateFormat) + '';
             // console.log(">>>>dates>>>>>row[field] >>>>>>> " +  row[field]);
         });
-
     },
 
-    bitToInt(results, field)
-    {
+    format(results, field, fn) {
+
+        results.forEach(row => {
+            let value = row[field];
+            if (value !== undefined && value !== null)
+                row[field] = fn(row[field]);
+            // console.log(">>>>dates>>>>>row[field] >>>>>>> " +  row[field]);
+        });
+    },
+
+    bitToInt(results, field) {
         results.forEach(row => {
             let value = row[field];
             if (value === undefined || value === null)
-                row[field] = 0; 
+                row[field] = 0;
             else
-                row[field] = !!row[field] ? 1 : 0 ;
+                row[field] = !!row[field] ? 1 : 0;
             //console.log(">>>>bitAsInt>>>>>row[field] >>>>>>> " +  row[field]);
         });
     }
