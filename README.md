@@ -22,5 +22,6 @@ $ npm publish
 # Connect with 
   username: soundaravalli2021@gmail.com 
   password : xxxxxxxx (Contact admin)
+  npm username : stashook
 # Note: Update version for each npm publish in
   package.json

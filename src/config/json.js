@@ -118,7 +118,32 @@ module.exports = {
                 row[field] = !!row[field] ? 1 : 0;
             //console.log(">>>>bitAsInt>>>>>row[field] >>>>>>> " +  row[field]);
         });
-    }
+    },
+
+    //Can Be Used To Duplicate Existing Key Value, With Key append with underscore. 
+    // for example: 
+    // insert(results, field)     => { "name"  : "some value", "_name" : "some value"} ;           // Note field and value will be in results
+    // insert(results, field, fn) => { "name"  : "some value", "_name" : "some value formatted"} ; // Note field and value will be in results
+    // insert(results, field, fn) => {                         "_name" : "some value"} ;           // Note field and value Not  in results
+    // insert(results, field, fn)
+    // {
+    //     results.forEach(row => {
+    //         let value = row[field];
+    //         if (value !== undefined && value !== null)
+    //         {
+    //             if(fn)
+    //                 row["_" + field] = fn(row[field]);
+    //             else
+    //                 row["_" + field] = row[field]; 
+    //         }
+    //         else
+    //         {
+    //             row[field] = fn(); 
+    //         }
+    //         console.log(">>>>insert(results, field, fn)>>>>>row[field] >>>>>>> " +  row[field]);
+    //     });
+
+    // }
 
 }
 
