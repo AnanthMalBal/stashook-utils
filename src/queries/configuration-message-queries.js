@@ -1,6 +1,6 @@
 module.exports = {
 
-    ProducerConfiguration: `SELECT value FROM producersproperty WHERE status = 1 AND producerId Like ? AND property = ? `,
+    ProducerConfiguration: `SELECT value FROM producers_property WHERE status = 1 AND producerId Like ? AND property = ? `,
 
     MessageTemplate: `SELECT * FROM messages WHERE status = 1 AND media = ? AND messageId = ? `,
 
